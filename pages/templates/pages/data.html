@@ -1,0 +1,11 @@
+<!-- templates/data.html -->
+{% extends 'pages/base.html' %}
+
+{% block content %}
+<h1>Message</h1>
+<ul>
+    {% for post in object_list %}
+        <li>{{ post.text }}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}
