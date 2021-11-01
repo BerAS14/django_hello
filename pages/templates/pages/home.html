@@ -2,5 +2,22 @@
 {% extends 'pages/base.html' %}
 
 {% block content %}
-<h1>Hello world!</h1>
+    <div>
+          <header>
+              <div class="nav-left">
+                  <h1>Hello world!</h1>
+              </div>
+              <div class="nav-right">
+                  <a href="{% url 'data' %}">+ New note</a>
+              </div>
+          </header>
+        {% if user.is_authenticated %}
+        <p>Hi {{ user.username }}!</p>
+        <p><a href="{% url 'logout' %}">Log out</a></p>
+        {% else %}
+        <p>You are not logged in.</p>
+        <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    </div>
+
 {% endblock content %}
