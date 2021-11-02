@@ -1,9 +1,12 @@
 <!-- templates/home.html -->
+<header>
 {% extends 'pages/base.html' %}
-
 {% block content %}
     <div>
-          <header>
+
+        {% if user.is_authenticated %}
+
+         <header>
               <div class="nav-left">
                   <h1>Hello world!</h1>
               </div>
@@ -11,13 +14,18 @@
                   <a href="{% url 'data' %}">+ New note</a>
               </div>
           </header>
-        {% if user.is_authenticated %}
         <p>Hi {{ user.username }}!</p>
         <p><a href="{% url 'logout' %}">Log out</a></p>
+
         {% else %}
+        <header>
         <p>You are not logged in.</p>
         <a href="{% url 'login' %}">Log In</a>
         {% endif %}
+        <p><a href="{% url 'signup' %}">Sign Up</a></p>
+        </header>
     </div>
 
 {% endblock content %}
+
+</header>

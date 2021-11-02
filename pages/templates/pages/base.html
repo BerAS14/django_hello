@@ -1,7 +1,10 @@
 <!-- templates/base.html -->
 <header>
-  <a href="{% url 'home' %}">Home</a> | <a href="{% url 'test' %}">Test</a> | <a href="{% url 'data' %}">Diary</a>
 </header>
- 
+{% if user.is_authenticated %}
+  <header>
+    <a href="{% url 'home' %}">Home</a> | <a href="{% url 'test' %}">Test</a> | <a href="{% url 'data' %}">Diary</a>
+  </header>
+{% endif %}
 {% block content %}
 {% endblock content %}
