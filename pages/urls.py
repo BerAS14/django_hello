@@ -11,4 +11,11 @@ urlpatterns = [
     path('posts/<int:pk>/', views.PostDetail.as_view()),
     path('users/', views.UserList.as_view()),
     path('users/<int:pk>/', views.UserDetail.as_view()),
+    path('snake_start/', views.StartPauseNewGameView.as_view()),
+    path('do_step/', views.DoStepView.as_view()),
+    path('go_left/', views.GoLeftView.as_view()),
+    path('go_right/', views.GoRightView.as_view()),
+    path('go_up/', views.GoUpView.as_view()),
+    path('go_down/', views.GoDownView.as_view()),
+
 ]

@@ -1,12 +1,18 @@
+import json
+
 from django.views.generic import TemplateView
 from django.views.generic import ListView
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from pages.models import Post
 
 from rest_framework import generics
 from . import serializers
 from django.contrib.auth.models import User
+
+from .controller_game_snake import ControllerGameSnake
+from .state_game_snake import StateGameSnake
 
 
 class UserList(generics.ListAPIView):
@@ -52,6 +58,50 @@ class DataBasePageView(ListView):
     model = Post
     template_name = 'pages/data.html'
 
+def toJSON(self):
+    return json.dumps(self, default=lambda o: o.__dict__,
+                      sort_keys=True, indent=4)
+
+
+class GameSnake:
+    controller = ControllerGameSnake()
+    controller.game_init()
+
+
+class StartPauseNewGameView(APIView):
+    def get(self, request):
+
+        GameSnake.controller.start_pause_new_game()
+        return Response(json.loads(toJSON(GameSnake.controller.state)))
+
+
+class DoStepView(APIView):
+    def get(self, request):
+        GameSnake.controller.do_step()
+        return Response(json.loads(toJSON(GameSnake.controller.state)))
+
+
+class GoLeftView(APIView):
+    def get(self, request):
+        GameSnake.controller.go_left()
+        return Response(json.loads(toJSON(GameSnake.controller.state.direction)))
+
+
+class GoRightView(APIView):
+    def get(self, request):
+        GameSnake.controller.go_right()
+        return Response(json.loads(toJSON(GameSnake.controller.state.direction)))
+
+
+class GoUpView(APIView):
+    def get(self, request):
+        GameSnake.controller.go_up()
+        return Response(json.loads(toJSON(GameSnake.controller.state.direction)))
+
+class GoDownView(APIView):
+    def get(self, request):
+        GameSnake.controller.go_down()
+        return Response(json.loads(toJSON(GameSnake.controller.state.direction)))
 
 
 # Create your views here.
