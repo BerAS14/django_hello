@@ -38,11 +38,16 @@ function drawSnake(stateSnake) {
 var canvas = document.getElementById("c");//get the canvas in javascript
 var context = canvas.getContext("2d");//getcontext on canvas
 
-fetch('/do_step/?format=json').then(response => response.json()).then(stateSnake => drawSnake(stateSnake));
+function fetchNow() {
+  fetch('/do_step/?format=json').then(response => response.json()).then(stateSnake => {
+      drawSnake(stateSnake);
+      setTimeout(fetchNow, 1000);
+  });
+}
+
+fetchNow();
 
         </script>
-
-
       </body>
     </html>
 

@@ -17,5 +17,6 @@ urlpatterns = [
     path('go_right/', views.GoRightView.as_view()),
     path('go_up/', views.GoUpView.as_view()),
     path('go_down/', views.GoDownView.as_view()),
+    path('state/', views.GetStateView.as_view()),
 
 ]

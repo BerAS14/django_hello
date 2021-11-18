@@ -105,5 +105,9 @@ class GoDownView(APIView):
         GameSnake.controller.go_down()
         return Response(json.loads(toJSON(GameSnake.controller.state.direction)))
 
+class GetStateView(APIView):
+    def get(self, request):
+        return Response(json.loads(toJSON(GameSnake.controller.state)))
+
 
 # Create your views here.
