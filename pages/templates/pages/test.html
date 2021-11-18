@@ -1,6 +1,49 @@
-<!-- templates/test.html -->
-{% extends 'pages/base.html' %}
+<html>
+      <body>
+       <canvas id="c" width="1000" height="700" style="border:1px solid red; background-color: yellow"></canvas>
+        <script>
 
-{% block content %}
-<h1>Testpage</h1>
-{% endblock content %}
+
+
+    screen_field_width = 1000;
+    screen_field_height = 700;
+    color_field = 'white';
+    color_head_snake = 'blue';
+    color_snake = 'green';
+
+function transformCoordinate(x, y, state_field_width, state_field_height) {
+    return [Math.round(screen_field_width / state_field_width * x),
+        Math.round(screen_field_height - y * screen_field_height / state_field_height)];
+}
+
+function getSizeRectangle(state_field_width, state_field_height) {
+    return [Math.round(screen_field_width / state_field_width * 1), Math.round(1 * screen_field_height / state_field_height)];
+}
+
+function drawSnake(stateSnake) {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    context.beginPath();
+    screen_size_rectangle = getSizeRectangle(stateSnake['field'][0], stateSnake['field'][1]);
+    console.log(screen_size_rectangle);
+    for (var prop in stateSnake['snake']) {
+      screen_coordinates = transformCoordinate(stateSnake['snake'][prop].x, stateSnake['snake'][prop].y, stateSnake['field'][0], stateSnake['field'][1]);
+      console.log(screen_coordinates);
+      context.rect(screen_coordinates[0], screen_coordinates[1], screen_size_rectangle[0], screen_size_rectangle[1]);
+      context.fillStyle = "blue";
+      context.fill();
+      context.stroke();
+    }
+}
+
+var canvas = document.getElementById("c");//get the canvas in javascript
+var context = canvas.getContext("2d");//getcontext on canvas
+
+fetch('/do_step/?format=json').then(response => response.json()).then(stateSnake => drawSnake(stateSnake));
+
+        </script>
+
+
+      </body>
+    </html>
+
+
