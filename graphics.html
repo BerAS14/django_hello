@@ -1,8 +1,15 @@
+
 <html>
       <body>
        <canvas id="c" width="1000" height="700" style="border:1px solid red; background-color: yellow"></canvas>
         <script>
-        var state = {
+<!--        let url = 'http://127.0.0.1:8000/do_step/?format=json';-->
+<!--        fetch('http://127.0.0.1:8000/do_step/?format=json')-->
+<!--        .then(response => response.json())-->
+<!--        .then(commits => console.log(commits));-->
+
+
+        var stateSnake = {
     "direction": "Right",
     "field": [
         24,
@@ -10,7 +17,7 @@
         "white"
     ],
     "game_over": false,
-    "game_started": false,
+    "game_started": true,
     "snake": [
         {
             "x": 12,
@@ -35,29 +42,41 @@
     ],
     "step_over": false
 }
-          def draw(state) {
-              state["snake"]
-          }
 
-          var canvas = document.getElementById("c");//get the canvas in javascript
-          var context = canvas.getContext("2d");//getcontext on canvas
-          rex = context.rect(460,310,40,40);
-          rex = context.rect(500,310,40,40);
-          context.beginPath();
+    screen_field_width = 1000;
+    screen_field_height = 700;
+    color_field = 'white';
+    color_head_snake = 'blue';
+    color_snake = 'green';
 
-          rex = context.rect(540,310,40,40);
-          context.rect(580,310,40,40);
-          context.fillStyle = "red";
-          context.fill();
-          var step;
-          for (step = 0; step < 5; step++) {
-          console.log('Идём 1 шаг на восток');
-          }
+function transformCoordinate(x, y, state_field_width, state_field_height) {
+    return [Math.round(screen_field_width / state_field_width * x),
+        Math.round(screen_field_height - y * screen_field_height / state_field_height)];
+}
 
+function getSizeRectangle(state_field_width, state_field_height) {
+    return [Math.round(screen_field_width / state_field_width * 1), Math.round(1 * screen_field_height / state_field_height)];
+}
 
-          context.stroke(); //ink used for drawing Line (Default: Black)
+function drawSnake(stateSnake) {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    context.beginPath();
+    screen_size_rectangle = getSizeRectangle(stateSnake['field'][0], stateSnake['field'][1]);
+    console.log(screen_size_rectangle);
+    for (var prop in stateSnake['snake']) {
+      screen_coordinates = transformCoordinate(stateSnake['snake'][prop].x, stateSnake['snake'][prop].y, stateSnake['field'][0], stateSnake['field'][1]);
+      console.log(screen_coordinates);
+      context.rect(screen_coordinates[0], screen_coordinates[1], screen_size_rectangle[0], screen_size_rectangle[1]);
+      context.fillStyle = "blue";
+      context.fill();
+      context.stroke();
+    }
+}
 
+var canvas = document.getElementById("c");//get the canvas in javascript
+var context = canvas.getContext("2d");//getcontext on canvas
 
+drawSnake(stateSnake);
 
         </script>
 

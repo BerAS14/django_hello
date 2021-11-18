@@ -1,5 +1,6 @@
 import json
 
+from django.core.mail.backends import console
 from django.views.generic import TemplateView
 from django.views.generic import ListView
 from rest_framework.response import Response
@@ -66,12 +67,13 @@ def toJSON(self):
 class GameSnake:
     controller = ControllerGameSnake()
     controller.game_init()
+    jsonFile = toJSON(controller.state)
 
 
 class StartPauseNewGameView(APIView):
     def get(self, request):
-
         GameSnake.controller.start_pause_new_game()
+        # print(toJSON(GameSnake.controller.state))
         return Response(json.loads(toJSON(GameSnake.controller.state)))
 
 
