@@ -26,7 +26,7 @@ class ControllerGameSnake(object):
             self.state.game_started = False
 
     def do_step(self):
-        if not self.state.game_started:
+        if not self.state.game_started or self.state.game_over:
             return
         if self.state.direction == 'Up':
             head_point = Point(self.head_x, self.head_y + 1)
