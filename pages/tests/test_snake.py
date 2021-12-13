@@ -1,7 +1,7 @@
 import unittest
-from controller_game_snake import ControllerGameSnake
-from drawing_graphics import transform_coordinate
-from point import Point
+
+from pages.controller_game_snake import ControllerGameSnake
+from pages.point import Point
 
 
 def fun(x):
@@ -53,19 +53,6 @@ class MyTest(unittest.TestCase):
         x = self.game.get_center()
         self.assertEqual((6, 4), x)
 
-    def test_transformation_coordinate_0_9(self):
-        x, y = transform_coordinate(0, 9, 13, 9)
-        self.assertEqual((0, 0), (x, y))
-
-    def test_transformation_coordinate_13_9(self):
-        x, y = transform_coordinate(13, 9, 13, 9)
-        self.assertEqual((1000, 0), (x, y))
-
-    def test_transformation_coordinate_13_0(self):
-        x, y = transform_coordinate(13, 0, 13, 9)
-        self.assertEqual((1000, 700), (x, y))
-
-
     def test_game_do_step_up(self):
         self.game.state.game_started = True
         self.game.do_step()
@@ -83,12 +70,12 @@ class MyTest(unittest.TestCase):
             "[{'x': 7, 'y': 3}, {'x': 7, 'y': 4}, {'x': 6, 'y': 4}, {'x': 5, 'y': 4}, {'x': 4, 'y': 4}]",
             str(self.game.state.snake))
 
-    def test_game_do_step_right(self):
+    def test_game_do_step_right_not_change_direction(self):
         self.game.state.game_started = True
         self.game.go_right()
         self.game.do_step()
         self.assertEqual(
-            "[{'x': 5, 'y': 4}, {'x': 6, 'y': 4}, {'x': 5, 'y': 4}, {'x': 4, 'y': 4}, {'x': 3, 'y': 4}]",
+            "[{'x': 7, 'y': 4}, {'x': 6, 'y': 4}, {'x': 5, 'y': 4}, {'x': 4, 'y': 4}, {'x': 3, 'y': 4}]",
             str(self.game.state.snake))
 
     def test_game_do_step_right(self):
@@ -164,3 +151,40 @@ class MyTest(unittest.TestCase):
         self.game.go_down()
         self.game.do_step()
         self.assertEqual(True, self.game.state.game_over)
+
+    def test_game_enlargement_snake_step_right(self):
+        self.game.state.game_started = True
+        self.game.state.apple.x = 8
+        self.game.state.apple.y = 4
+        self.game.do_step()
+        self.game.do_step()
+        self.assertEqual(6, len(self.game.state.snake))
+
+    def test_game_enlargement_snake_step_up(self):
+        self.game.state.game_started = True
+        self.game.state.apple.x = 7
+        self.game.state.apple.y = 5
+        self.game.do_step()
+        self.game.go_up()
+        self.game.do_step()
+        self.assertEqual(6, len(self.game.state.snake))
+
+    def test_game_enlargement_snake_step_down(self):
+        self.game.state.game_started = True
+        self.game.state.apple.x = 7
+        self.game.state.apple.y = 3
+        self.game.do_step()
+        self.game.go_down()
+        self.game.do_step()
+        self.assertEqual(6, len(self.game.state.snake))
+
+    def test_game_enlargement_snake_step_left(self):
+        self.game.state.game_started = True
+        self.game.state.apple.x = 6
+        self.game.state.apple.y = 3
+        self.game.do_step()
+        self.game.go_down()
+        self.game.do_step()
+        self.game.go_left()
+        self.game.do_step()
+        self.assertEqual(6, len(self.game.state.snake))

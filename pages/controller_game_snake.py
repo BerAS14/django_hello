@@ -1,3 +1,5 @@
+from random import randint
+
 from .state_game_snake import StateGameSnake
 from .point import Point
 
@@ -7,6 +9,7 @@ class ControllerGameSnake(object):
         self.state = StateGameSnake()
         self.state.field = [24, 18, 'white']
         self.length_snake = 5
+        self.acceleration = 10
 
     def __repr__(self):
         return str(vars(self))
@@ -30,27 +33,21 @@ class ControllerGameSnake(object):
             return
         if self.state.direction == 'Up':
             head_point = Point(self.head_x, self.head_y + 1)
-            if not self.check_game_over(head_point):
-                self.state.snake.pop()
-                self.state.snake.insert(0, head_point)
+            self.check_state_game(head_point)
         if self.state.direction == 'Down':
             head_point = Point(self.head_x, self.head_y - 1)
-            if not self.check_game_over(head_point):
-                self.state.snake.pop()
-                self.state.snake.insert(0, head_point)
+            self.check_state_game(head_point)
         if self.state.direction == 'Left':
             head_point = Point(self.head_x - 1, self.head_y)
-            if not self.check_game_over(head_point):
-                self.state.snake.pop()
-                self.state.snake.insert(0, head_point)
+            self.check_state_game(head_point)
         if self.state.direction == 'Right':
             head_point = Point(self.head_x + 1, self.head_y)
-            if not self.check_game_over(head_point):
-                self.state.snake.pop()
-                self.state.snake.insert(0, head_point)
+            self.check_state_game(head_point)
         self.state.step_over = True
 
     def game_init(self):
+        self.state.speed = 600
+        self.state.apple = Point(randint(0, self.state.field[0]-1), randint(1, self.state.field[1]))
         snake_head_x, snake_head_y = self.get_center()
         self.state.snake = []
         for i in range(self.length_snake):
@@ -111,6 +108,23 @@ class ControllerGameSnake(object):
             return True
         return False
 
+    def check_apple_eaten(self, head_point):
+        if head_point == self.state.apple:
+            while True:
+                self.state.apple.x = randint(0, self.state.field[0]-1)
+                self.state.apple.y = randint(1, self.state.field[1])
+                if self.state.snake.count(self.state.apple) == 0:
+                    break
+            return True
+        return False
+
+    def check_state_game(self, head_point):
+        if not self.check_game_over(head_point):
+            if not self.check_apple_eaten(head_point):
+                self.state.snake.pop()
+            else:
+                self.state.speed -= self.acceleration
+            self.state.snake.insert(0, head_point)
 
 
 
